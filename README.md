@@ -4,14 +4,17 @@ BrigadierのKotlin用ラッパー
 
 ![Maven metadata URL](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Futen2c.github.io%2Frepo%2Fdev%2Futen2c%2Fcmdlib%2Fmaven-metadata.xml)
 
+[uten2c](https://github.com/uTen2c)/[cmdlib](https://github.com/uTen2c/cmdlib)のフォーク版です．本人より許諾を得て改変・MITライセンスでの配布を行っております
+
 ### Groovy DSL
+
 ```groovy
 repositories {
-  maven { url 'https://uten2c.github.io/repo/' }
+    maven { url 'https://uten2c.github.io/repo/' }
 }
 
 dependencies {
-  implementation 'dev.uten2c:cmdlib:VERSION'
+    implementation 'dev.uten2c:cmdlib:VERSION'
 }
 ```
 

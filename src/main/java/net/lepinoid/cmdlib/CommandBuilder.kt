@@ -1,4 +1,4 @@
-package dev.uten2c.cmdlib
+package net.lepinoid.cmdlib
 
 import com.mojang.brigadier.arguments.*
 import com.mojang.brigadier.builder.ArgumentBuilder

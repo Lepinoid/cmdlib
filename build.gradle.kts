@@ -11,7 +11,7 @@ val mcVer = "1.17.1"
 
 base {
     archivesName.set("cmdlib")
-    group = "dev.uten2c"
+    group = "net.lepinoid"
     version = "$mcVer+1"
 }
 
@@ -63,8 +63,8 @@ publishing {
     }
     repositories {
         maven {
-            url = uri("${System.getProperty("user.home")}/maven-repo")
-            println(uri("${System.getProperty("user.home")}/maven-repo"))
+            url = uri("${System.getProperty("user.home")}/lepinoid/maven-repo")
+            println(uri("${System.getProperty("user.home")}/lepinoid/maven-repo"))
         }
     }
 }

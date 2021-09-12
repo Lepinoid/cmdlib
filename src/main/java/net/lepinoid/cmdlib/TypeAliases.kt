@@ -1,3 +1,3 @@
-package dev.uten2c.cmdlib
+package net.lepinoid.cmdlib
 
 internal typealias Child = CommandBuilder.() -> Unit

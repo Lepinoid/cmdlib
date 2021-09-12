@@ -1,4 +1,4 @@
-package dev.uten2c.cmdlib
+package net.lepinoid.cmdlib
 
 import com.destroystokyo.paper.brigadier.BukkitBrigadierCommandSource
 import com.mojang.brigadier.builder.LiteralArgumentBuilder

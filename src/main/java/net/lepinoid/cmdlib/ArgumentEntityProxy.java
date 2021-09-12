@@ -1,4 +1,4 @@
-package dev.uten2c.cmdlib;
+package net.lepinoid.cmdlib;
 
 
 import net.minecraft.commands.arguments.ArgumentEntity;
