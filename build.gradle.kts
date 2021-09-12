@@ -28,9 +28,9 @@ repositories {
 
 dependencies {
     val releaseVer = "R0.1-SNAPSHOT"
-    implementation("io.papermc.paper:paper-api:$mcVer-$releaseVer")
-    implementation("io.papermc.paper:paper-mojangapi:$mcVer-$releaseVer")
-    implementation("org.spigotmc:spigot:$mcVer-$releaseVer")
+    compileOnly("io.papermc.paper:paper-api:$mcVer-$releaseVer")
+    compileOnly("io.papermc.paper:paper-mojangapi:$mcVer-$releaseVer")
+    compileOnly("org.spigotmc:spigot:$mcVer-$releaseVer")
 }
 
 tasks.withType<fr.il_totore.manadrop.spigot.task.BuildTools> {
