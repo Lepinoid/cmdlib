@@ -3,30 +3,40 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     `maven-publish`
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.5.30"
+    id("fr.il_totore.manadrop") version "0.4-SNAPSHOT"
 }
 
+val mcVer = "1.17.1"
+
 base {
-    archivesBaseName = "cmdlib"
+    archivesName.set("cmdlib")
     group = "dev.uten2c"
-    version = "1.16.5+1"
+    version = "$mcVer+1"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 repositories {
     mavenLocal()
-    jcenter()
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://libraries.minecraft.net")
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
-    implementation("com.destroystokyo.paper:paper:1.16.5-R0.1-SNAPSHOT")
+    val releaseVer = "R0.1-SNAPSHOT"
+    implementation("io.papermc.paper:paper-api:$mcVer-$releaseVer")
+    implementation("io.papermc.paper:paper-mojangapi:$mcVer-$releaseVer")
+    implementation("org.spigotmc:spigot:$mcVer-$releaseVer")
+}
+
+tasks.withType<fr.il_totore.manadrop.spigot.task.BuildTools> {
+    versions(mcVer)
+    workDir = File("run")
+    mavenPath = "/usr/bin/mvn"
 }
 
 val sourcesJar = tasks.create<Jar>("sourcesJar") {
@@ -36,7 +46,7 @@ val sourcesJar = tasks.create<Jar>("sourcesJar") {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "16"
     }
 }
 
@@ -44,7 +54,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
-            artifactId = project.base.archivesBaseName
+            artifactId = project.base.archivesName.get()
             version = project.version.toString()
 
             from(components["java"])

@@ -1,6 +1,7 @@
 package dev.uten2c.cmdlib;
 
-import net.minecraft.server.v1_16_R3.ArgumentEntity;
+
+import net.minecraft.commands.arguments.ArgumentEntity;
 
 class ArgumentEntityProxy {
 

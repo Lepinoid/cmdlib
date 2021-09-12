@@ -7,7 +7,13 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
-import net.minecraft.server.v1_16_R3.*
+import net.minecraft.commands.CommandListenerWrapper
+import net.minecraft.commands.arguments.ArgumentChat
+import net.minecraft.commands.arguments.ArgumentEntity
+import net.minecraft.commands.arguments.ArgumentUUID
+import net.minecraft.commands.arguments.coordinates.ArgumentPosition
+import net.minecraft.commands.arguments.coordinates.ArgumentVec3
+import net.minecraft.commands.arguments.item.ArgumentItemStack
 import org.bukkit.command.CommandSender
 import java.util.concurrent.CompletableFuture
 import com.destroystokyo.paper.brigadier.BukkitBrigadierCommandSource as Source
