@@ -56,9 +56,16 @@ publishing {
             groupId = project.group.toString()
             artifactId = project.base.archivesName.get()
             version = project.version.toString()
-
             from(components["java"])
             artifact(sourcesJar)
+            pom {
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://raw.githubusercontent.com/Lepinoid/cmdlib/develop/LICENSE")
+                    }
+                }
+            }
         }
     }
     repositories {
