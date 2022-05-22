@@ -7,7 +7,7 @@ plugins {
     id("io.papermc.paperweight.userdev") version "1.3.6"
 }
 
-val mcVer = "1.17.1"
+val mcVer = "1.18.2"
 
 base {
     archivesName.set("cmdlib")
@@ -16,8 +16,8 @@ base {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -36,7 +36,7 @@ val sourcesJar = tasks.create<Jar>("sourcesJar") {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "16"
+        jvmTarget = "17"
     }
 }
 
