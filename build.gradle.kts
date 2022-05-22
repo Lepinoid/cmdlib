@@ -27,6 +27,8 @@ repositories {
 
 dependencies {
     paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
 }
 
 val sourcesJar = tasks.create<Jar>("sourcesJar") {
