@@ -4,7 +4,7 @@ plugins {
     java
     `maven-publish`
     kotlin("jvm") version "1.5.30"
-    id("fr.il_totore.manadrop") version "0.4-SNAPSHOT"
+    id("io.papermc.paperweight.userdev") version "1.3.6"
 }
 
 val mcVer = "1.17.1"
@@ -21,22 +21,12 @@ java {
 }
 
 repositories {
-    mavenLocal()
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://libraries.minecraft.net")
 }
 
 dependencies {
-    val releaseVer = "R0.1-SNAPSHOT"
-    compileOnly("io.papermc.paper:paper-api:$mcVer-$releaseVer")
-    compileOnly("io.papermc.paper:paper-mojangapi:$mcVer-$releaseVer")
-    compileOnly("org.spigotmc:spigot:$mcVer-$releaseVer")
-}
-
-tasks.withType<fr.il_totore.manadrop.spigot.task.BuildTools> {
-    versions(mcVer)
-    workDir = File("run")
-    mavenPath = "/usr/bin/mvn"
+    paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
 }
 
 val sourcesJar = tasks.create<Jar>("sourcesJar") {
