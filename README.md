@@ -6,6 +6,8 @@ BrigadierのKotlin用ラッパー
 
 [uten2c](https://github.com/uTen2c)/[cmdlib](https://github.com/uTen2c/cmdlib)のフォーク版です．本人より許諾を得て改変・MITライセンスでの配布を行っております
 
+> 1.18以降のバージョンではuten2c氏の[strobo](https://github.com/uTen2c/strobo)より移植しています
+
 ### Groovy DSL
 
 ```groovy
@@ -49,6 +51,7 @@ cmdLib.register("example") {
     }
 
     literal("getDiamond") {
+        //before 1.18
         integer("amount", 0, 64) {
             executes {
                 val itemStack = ItemStack(Material.DIAMOND).apply {
@@ -57,13 +60,29 @@ cmdLib.register("example") {
                 player.inventory.addItem(itemStack)
             }
         }
+        // 1.18~
+        integer(0, 64) { getAmount ->
+            executes {
+                val itemStack = ItemStack(Material.DIAMOND).apply {
+                    amount = getAmount()
+                }
+                player.inventory.addItem(itemStack)
+            }
+        }
     }
 
     literal("tp") {
+        // before 1.18
         entity("target") {
             executes {
                 val target = getEntity("target")
                 player.teleport(target.location)
+            }
+        }
+        // 1.18~
+        entity { getTarget ->
+            executes {
+                player.teleport(getTarget().location)
             }
         }
     }
@@ -72,21 +91,7 @@ cmdLib.register("example") {
 
 ## 引数
 
-- `boolean`
-- `double`
-- `float`
-- `integer`
-- `long`
-- `string`
-- `blockPos`
-- `entity`
-- `entities`
-- `message`
-- `player`
-- `players`
-- `itemStack`
-- `uuid`
-- `vector`
+see [CommandBuilder.kt](https://github.com/Lepinoid/cmdlib/blob/d2fcb22f483e80964a4c221f87b007cc1481a4a9/src/main/java/net/lepinoid/cmdlib/CommandBuilder.kt#L102)
 
 ## Tips
 
