@@ -60,10 +60,12 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            url = uri("${System.getProperty("user.home")}/lepinoid/maven-repo")
-            println(uri("${System.getProperty("user.home")}/lepinoid/maven-repo"))
+    val publishTargetPath = System.getenv()["PUBLISH_PATH"]
+    if (publishTargetPath != null) {
+        repositories {
+            maven {
+                url = uri(publishTargetPath)
+            }
         }
     }
 }
