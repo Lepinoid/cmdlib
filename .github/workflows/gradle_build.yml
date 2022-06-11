@@ -28,6 +28,8 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1.0.4
     - name: Make gradlew executable
       run: chmod +x gradlew
     - name: Build with Gradle
