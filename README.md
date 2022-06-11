@@ -6,7 +6,9 @@ BrigadierのKotlin用ラッパー
 
 [uten2c](https://github.com/uTen2c)/[cmdlib](https://github.com/uTen2c/cmdlib)のフォーク版です．本人より許諾を得て改変・MITライセンスでの配布を行っております
 
-> 1.18以降のバージョンではuten2c氏の[strobo](https://github.com/uTen2c/strobo)より移植しています
+> 1.18以降のバージョンではuten2c氏の[strobo](https://github.com/uTen2c/strobo)より移植しています。
+> 
+> 注意：**一部argumentはNMSが必須になります**
 
 ### Groovy DSL
 
