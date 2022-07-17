@@ -25,7 +25,7 @@ data class CmdLib(val plugin: Plugin) {
     }
 
     companion object {
-        internal val dispatcher = (Bukkit.getServer() as CraftServer).handle.server.vanillaCommandDispatcher.dispatcher
+        internal val dispatcher = (Bukkit.getServer() as CraftServer).server.vanillaCommandDispatcher.dispatcher
         internal val registeredNodes = HashSet<LiteralCommandNode<*>>()
     }
 
