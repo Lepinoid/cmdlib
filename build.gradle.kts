@@ -12,7 +12,7 @@ val mcVer = "1.18.2"
 base {
     archivesName.set("cmdlib")
     group = "net.lepinoid"
-    version = "$mcVer+build.1"
+    version = "$mcVer+build.2"
 }
 
 java {
