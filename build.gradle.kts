@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     `maven-publish`
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.10"
     id("io.papermc.paperweight.userdev") version "1.3.6"
 }
 
