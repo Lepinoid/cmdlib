@@ -4,7 +4,7 @@ plugins {
     java
     `maven-publish`
     kotlin("jvm") version "1.9.0"
-    id("io.papermc.paperweight.userdev") version "1.3.6"
+    id("io.papermc.paperweight.userdev") version "1.5.5"
 }
 
 val mcVer = "1.18.2"
