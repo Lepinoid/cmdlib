@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     `maven-publish`
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.9.0"
     id("io.papermc.paperweight.userdev") version "1.3.6"
 }
 
@@ -28,7 +28,7 @@ repositories {
 dependencies {
     paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 }
 
 val sourcesJar = tasks.create<Jar>("sourcesJar") {
