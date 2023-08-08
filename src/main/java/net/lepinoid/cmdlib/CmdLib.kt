@@ -18,7 +18,6 @@ data class CmdLib(val plugin: Plugin) {
         plugin.server.pluginManager.registerEvents(PluginDisableListener(plugin), plugin)
     }
 
-    @Suppress("UNCHECKED_CAST")
     fun register(name: String, child: CommandBuilder.() -> Unit) {
         val commandbuildcontext = Commands.createValidationContext(VanillaRegistries.createLookup())
         val builder = LiteralArgumentBuilder.literal<CommandSourceStack>(name)

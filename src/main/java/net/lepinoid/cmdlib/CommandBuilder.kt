@@ -20,6 +20,7 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
 import java.util.function.Supplier
+import kotlin.reflect.jvm.ExperimentalReflectionOnLambdas
 import kotlin.reflect.jvm.reflect
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
@@ -266,7 +267,6 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
     fun world(child: CommandBuilder.(world: ArgumentGetter<String>) -> Unit) =
         next(child, StringArgumentType::word, StringArgumentType::getString)
 
-    @Suppress("UNCHECKED_CAST")
     fun executes(process: CommandContext.() -> Unit) {
         builder.executes {
             process(CommandContext(it))
@@ -289,7 +289,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(ExperimentalReflectionOnLambdas::class)
     private fun <T1, T2> next(
         child: CommandBuilder.(ArgumentGetter<T1>) -> Unit,
         argumentProvider: () -> ArgumentType<T2>,
@@ -301,7 +301,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         builder.then(arg)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(ExperimentalReflectionOnLambdas::class)
     private fun <T> nextScoreHolders(
         child: CommandBuilder.(ScoreHoldersArgument) -> Unit,
         argumentProvider: () -> ArgumentType<T>,
