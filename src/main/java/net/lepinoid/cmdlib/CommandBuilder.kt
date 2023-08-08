@@ -19,6 +19,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.lepinoid.cmdlib.argument.ArgumentGetter
 import net.lepinoid.cmdlib.argument.ScoreHoldersArgument
 import net.lepinoid.cmdlib.argument.paper.*
+import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandFunction
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.*
@@ -36,7 +37,9 @@ import net.minecraft.commands.arguments.item.FunctionArgument
 import net.minecraft.commands.arguments.item.ItemPredicateArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
 import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
@@ -52,18 +55,19 @@ import net.minecraft.world.scores.Objective
 import net.minecraft.world.scores.PlayerTeam
 import net.minecraft.world.scores.criteria.ObjectiveCriteria
 import org.bukkit.command.CommandSender
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import java.util.EnumSet
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
 import java.util.function.Supplier
-import kotlin.reflect.jvm.ExperimentalReflectionOnLambdas
 import kotlin.reflect.jvm.reflect
 import com.destroystokyo.paper.brigadier.BukkitBrigadierCommandSource as Source
 
 @Suppress("UNUSED")
-class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>) {
+class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>, private val registryAccess: CommandBuildContext) {
     internal var filter: ((CommandSourceStack) -> Boolean)? = null
         private set
     internal var aliases: List<String>? = null
@@ -95,7 +99,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
 
     fun literal(literal: String, child: Child) {
         val arg = literal<CommandSourceStack>(literal)
-        child(CommandBuilder(arg))
+        child(CommandBuilder(arg, registryAccess))
         builder.then(arg)
     }
 
@@ -106,10 +110,10 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         next(child, BlockPosArgument::blockPos, BlockPosArgument::getLoadedBlockPos)
 
     fun blockPredicate(child: CommandBuilder.(blockPredicate: ArgumentGetter<Predicate<BlockInWorld>>) -> Unit) =
-        next(child, BlockPredicateArgument::blockPredicate, BlockPredicateArgument::getBlockPredicate)
+        next(child, {BlockPredicateArgument.blockPredicate(registryAccess)}, BlockPredicateArgument::getBlockPredicate)
 
     fun blockStateArg(child: CommandBuilder.(blockState: ArgumentGetter<BlockInput>) -> Unit) =
-        next(child, BlockStateArgument::block, BlockStateArgument::getBlock)
+        next(child, {BlockStateArgument.block(registryAccess)}, BlockStateArgument::getBlock)
 
     fun boolean(child: CommandBuilder.(angle: ArgumentGetter<Boolean>) -> Unit) =
         next(child, BoolArgumentType::bool, BoolArgumentType::getBool)
@@ -136,7 +140,9 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
     ) = next(child, { DoubleArgumentType.doubleArg(min, max) }, DoubleArgumentType::getDouble)
 
     fun enchantment(child: CommandBuilder.(enchantment: ArgumentGetter<Enchantment>) -> Unit) =
-        next(child, ItemEnchantmentArgument::enchantment, ItemEnchantmentArgument::getEnchantment)
+        next(child, {ResourceArgument.resource(registryAccess, Registries.ENCHANTMENT)}) { ctx, name ->
+            ResourceArgument.getEnchantment(ctx, name).value()
+        }
 
     fun entities(child: CommandBuilder.(entities: ArgumentGetter<Collection<net.minecraft.world.entity.Entity>>) -> Unit) =
         next(child, EntityArgument::entities, EntityArgument::getEntities)
@@ -147,13 +153,15 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
     fun entityAnchor(child: CommandBuilder.(entityAnchor: ArgumentGetter<EntityAnchorArgument.Anchor>) -> Unit) =
         next(child, EntityAnchorArgument::anchor, EntityAnchorArgument::getAnchor)
 
-    fun entitySummon(child: CommandBuilder.(entityId: ArgumentGetter<ResourceLocation>) -> Unit) =
-        next(child, EntitySummonArgument::id, EntitySummonArgument::getSummonableEntity)
+    fun entitySummon(child: CommandBuilder.(entityId: ArgumentGetter<EntityType>) -> Unit) =
+        next(child, {ResourceArgument.resource(registryAccess, Registries.ENTITY_TYPE)}) { ctx, name ->
+            ResourceArgument.getEntityType(ctx, name).value().let { EntityType.fromName(it.descriptionId)!! }
+        }
 
     fun float(min: Float = -3.4028235E38f, max: Float = 3.4028235E38f, child: CommandBuilder.(float: ArgumentGetter<Float>) -> Unit) =
         next(child, { FloatArgumentType.floatArg(min, max)}, FloatArgumentType::getFloat)
 
-    fun functionOrTag(child: CommandBuilder.(pair: ArgumentGetter<com.mojang.datafixers.util.Pair<ResourceLocation, Either<CommandFunction, net.minecraft.tags.Tag<CommandFunction>>>>) -> Unit) =
+    fun functionOrTag(child: CommandBuilder.(pair: ArgumentGetter<com.mojang.datafixers.util.Pair<ResourceLocation, Either<CommandFunction, Collection<CommandFunction>>>>) -> Unit) =
         next(child, FunctionArgument::functions, FunctionArgument::getFunctionOrTag)
 
     fun functions(child: CommandBuilder.(functions: ArgumentGetter<Collection<CommandFunction>>) -> Unit) =
@@ -172,13 +180,13 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         next(child, { IntegerArgumentType.integer(min, max) }, IntegerArgumentType::getInteger)
 
     fun itemPredicate(child: CommandBuilder.(itemPredicate: ArgumentGetter<Predicate<ItemStack>>) -> Unit) =
-        next(child, ItemPredicateArgument::itemPredicate, ItemPredicateArgument::getItemPredicate)
+        next(child, { ItemPredicateArgument.itemPredicate(registryAccess)}, ItemPredicateArgument::getItemPredicate)
 
     fun itemSlot(child: CommandBuilder.(itemSlot: ArgumentGetter<Int>) -> Unit) =
         next(child, SlotArgument::slot, SlotArgument::getSlot)
 
     fun itemStack(child: CommandBuilder.(itemStack: ArgumentGetter<org.bukkit.inventory.ItemStack>) -> Unit) =
-        next(child, BukkitItemStackArgumentType::bukkitItem, BukkitItemStackArgumentType::getBukkitItem)
+        next(child, {BukkitItemStackArgumentType.bukkitItem(registryAccess)}, BukkitItemStackArgumentType::getBukkitItem)
 
     fun long(
         min: Long = -9223372036854775807L,
@@ -190,7 +198,9 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         next(child, AdventureComponentArgumentType::component, AdventureComponentArgumentType::getComponent)
 
     fun statusEffect(child: CommandBuilder.(statusEffect: ArgumentGetter<MobEffect>) -> Unit) =
-        next(child, MobEffectArgument::effect, MobEffectArgument::getEffect)
+        next(child, {ResourceArgument.resource(registryAccess, Registries.MOB_EFFECT)}) { ctx, name ->
+            ResourceArgument.getMobEffect(ctx, name).value()
+        }
 
     fun nbtPath(child: CommandBuilder.(nbtPath: ArgumentGetter<NbtPathArgument.NbtPath>) -> Unit) =
         next(child, NbtPathArgument::nbtPath, NbtPathArgument::getPath)
@@ -205,7 +215,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         next(child, OperationArgument::operation, OperationArgument::getOperation)
 
     fun particleEffect(child: CommandBuilder.(particleEffect: ArgumentGetter<ParticleOptions>) -> Unit) =
-        next(child, ParticleArgument::particle, ParticleArgument::getParticle)
+        next(child, {ParticleArgument.particle(registryAccess)}, ParticleArgument::getParticle)
 
     fun player(child: CommandBuilder.(player: ArgumentGetter<Player>) -> Unit) =
         next(child, BukkitEntityArgumentType::bukkitPlayer, BukkitEntityArgumentType::getBukkitPlayer)
@@ -291,7 +301,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
     ) {
         val name = getterNameToParamName(child.reflect()?.parameters?.get(1)?.name.toString())
         val arg = RequiredArgumentBuilder.argument<CommandSourceStack, T2>(name, argumentProvider())
-        child(CommandBuilder(arg), ArgumentGetter { factory(it, name) })
+        child(CommandBuilder(arg, registryAccess), ArgumentGetter { factory(it, name) })
         builder.then(arg)
     }
 
@@ -308,7 +318,7 @@ class CommandBuilder(private val builder: ArgumentBuilder<CommandSourceStack, *>
         val getterName = child.reflect()?.parameters?.get(1)?.name.toString()
         val name = getterNameToParamName(getterName)
         val arg = RequiredArgumentBuilder.argument<CommandSourceStack, T>(name, argumentProvider())
-        child(CommandBuilder(arg), ScoreHoldersArgument { ctx, supplier -> factory(ctx, name, supplier) })
+        child(CommandBuilder(arg, registryAccess), ScoreHoldersArgument { ctx, supplier -> factory(ctx, name, supplier) })
     }
 
     private fun getterNameToParamName(getterName: String): String {

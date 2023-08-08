@@ -16,7 +16,7 @@ class CommandContext(private val context: CommandContext<CommandSourceStack>) {
     val world: World get() = source.bukkitWorld!!
     val player: Player get() = source.playerOrException.bukkitEntity
 
-    fun sendFeedback(message: Component, broadcastToOps: Boolean = false) = source.sendSuccess(message, broadcastToOps)
+    fun sendFeedback(message: Component, broadcastToOps: Boolean = false) = source.sendSuccess({ message }, broadcastToOps)
 
     fun sendError(message: Component) = source.sendFailure(message)
 

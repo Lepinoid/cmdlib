@@ -7,12 +7,12 @@ plugins {
     id("io.papermc.paperweight.userdev") version "1.5.5"
 }
 
-val mcVer = "1.18.2"
+val mcVer = "1.20.1"
 
 base {
     archivesName.set("cmdlib")
     group = "net.lepinoid"
-    version = "$mcVer+build.3"
+    version = "$mcVer+build.1"
 }
 
 java {
@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 }
