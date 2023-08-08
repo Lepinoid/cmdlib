@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("${mcVer}-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("$mcVer-R0.1-SNAPSHOT")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 }
