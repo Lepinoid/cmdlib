@@ -7,12 +7,12 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.ColorArgument
 
 object AdventureTextColorArgumentType {
-        @JvmStatic
-        fun color(): ColorArgument = ColorArgument.color()
+    @JvmStatic
+    fun color(): ColorArgument = ColorArgument.color()
 
-        @JvmStatic
-        fun getColor(context: CommandContext<CommandSourceStack>, name: String): TextColor {
-            val vanillaFormatting = ColorArgument.getColor(context, name )
-            return PaperAdventure.asAdventure(vanillaFormatting)
-        }
+    @JvmStatic
+    fun getColor(context: CommandContext<CommandSourceStack>, name: String): TextColor {
+        val vanillaFormatting = ColorArgument.getColor(context, name)
+        return PaperAdventure.asAdventure(vanillaFormatting)
+    }
 }

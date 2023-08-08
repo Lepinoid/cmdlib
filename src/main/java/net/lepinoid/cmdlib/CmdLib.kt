@@ -37,7 +37,7 @@ data class CmdLib(val plugin: Plugin) {
         fun onReload(event: PluginDisableEvent) {
             if (event.plugin == plugin) {
                 registeredNodes.forEach {
-                    //FIXME
+                    // FIXME
 //                    dispatcher.root.removeCommand(it.literal)
                 }
             }

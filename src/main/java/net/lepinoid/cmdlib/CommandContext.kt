@@ -1,13 +1,13 @@
 package net.lepinoid.cmdlib
 
 import com.mojang.brigadier.context.CommandContext
+import java.util.function.Supplier
 import net.lepinoid.cmdlib.argument.ArgumentGetter
 import net.lepinoid.cmdlib.argument.ScoreHoldersArgument
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.network.chat.Component
 import org.bukkit.World
 import org.bukkit.entity.Player
-import java.util.function.Supplier
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class CommandContext(private val context: CommandContext<CommandSourceStack>) {

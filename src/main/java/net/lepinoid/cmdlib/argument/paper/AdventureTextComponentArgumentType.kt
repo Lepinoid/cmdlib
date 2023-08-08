@@ -15,5 +15,4 @@ object AdventureTextComponentArgumentType {
         val vanillaComponent = ComponentArgument.getComponent(context, name)
         return PaperAdventure.asAdventure(vanillaComponent)
     }
-
 }

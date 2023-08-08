@@ -7,12 +7,12 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.MessageArgument
 
 object AdventureComponentArgumentType {
-        @JvmStatic
-        fun component(): MessageArgument = MessageArgument.message()
+    @JvmStatic
+    fun component(): MessageArgument = MessageArgument.message()
 
-        @JvmStatic
-        fun getComponent(context: CommandContext<CommandSourceStack>, name: String): Component {
-            val vanillaComponent = MessageArgument.getMessage(context, name)
-            return PaperAdventure.asAdventure(vanillaComponent)
-        }
+    @JvmStatic
+    fun getComponent(context: CommandContext<CommandSourceStack>, name: String): Component {
+        val vanillaComponent = MessageArgument.getMessage(context, name)
+        return PaperAdventure.asAdventure(vanillaComponent)
+    }
 }

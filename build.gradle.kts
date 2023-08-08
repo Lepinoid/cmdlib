@@ -5,6 +5,7 @@ plugins {
     `maven-publish`
     kotlin("jvm") version "1.9.0"
     id("io.papermc.paperweight.userdev") version "1.5.5"
+    id("org.jmailen.kotlinter") version "3.15.0"
 }
 
 val mcVer = "1.20.1"
